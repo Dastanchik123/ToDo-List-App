@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ru" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro - Управление задачами</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#4f46e5',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        /* Анимации появление модалок */
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-modal {
+            animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-full flex flex-col antialiased">
+
+    <!-- Главный контейнер приложения -->
+    <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-4 md:p-6 gap-6">
+
+        <!-- Боковая панель (Sidebar) -->
+        <aside class="w-full md:w-64 flex-shrink-0 bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700/50 flex flex-col justify-between">
+            <div class="space-y-6">
+                <!-- Логотип -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                            <i class="fa-solid font-bold fa-check-double text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg leading-tight">TaskFlow</h1>
+                            <span class="text-xs text-slate-400 dark:text-slate-500 font-medium">Pro Edition</span>
+                        </div>
+                    </div>
+                    <!-- Кнопка переключения темы -->
+                    <button id="themeToggleBtn" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg transition-colors">
+                        <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+                        <i class="fa-solid fa-sun text-lg hidden dark:block text-amber-400"></i>
+                    </button>
+                </div>
+
+                <!-- Главная кнопка действия -->
+                <button onclick="openCreateModal()" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all transform active:scale-95">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Новая задача</span>
+                </button>
+
+                <!-- Фильтры по категориям -->
+                <div class="space-y-1">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 mb-2">Категории</p>
+                    <button onclick="setCategoryFilter('all')" class="cat-btn active w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-sm transition-all bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400" data-category="all">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-layer-group w-4 text-center"></i>Все задачи</span>
+                        <span id="count-all" class="text-xs px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-300">0</span>
+                    </button>
+                    <button onclick="setCategoryFilter('Работа')" class="cat-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all" data-category="Работа">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-briefcase w-4 text-center text-blue-500"></i>Работа</span>
+                        <span id="count-work" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400">0</span>
+                    </button>
+                    <button onclick="setCategoryFilter('Личное')" class="cat-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all" data-category="Личное">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-user w-4 text-center text-emerald-500"></i>Личное</span>
+                        <span id="count-personal" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400">0</span>
+                    </button>
+                    <button onclick="setCategoryFilter('Учеба')" class="cat-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all" data-category="Учеба">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-graduation-cap w-4 text-center text-purple-500"></i>Учеба</span>
+                        <span id="count-study" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Статистика выполнения -->
+            <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700/50">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Прогресс выполнения</span>
+                    <span id="progressText" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">0%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 w-0 transition-all duration-500"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Основная область с задачами -->
+        <main class="flex-1 flex flex-col bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-700/50">
+            
+            <!-- Панель управления (Поиск и Фильтры по статусу) -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center pb-6 border-b border-slate-100 dark:border-slate-700/50">
+                <!-- Поиск -->
+                <div class="relative flex-1 max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchInput" oninput="renderTasks()" placeholder="Поиск по задачам..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition-colors">
+                </div>
+
+                <!-- Табы статуса -->
+                <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl gap-1 text-xs font-medium">
+                    <button onclick="setStatusFilter('all')" class="status-tab active-tab flex-1 sm:flex-initial px-3 py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400" data-status="all">Все</button>
+                    <button onclick="setStatusFilter('active')" class="status-tab flex-1 sm:flex-initial px-3 py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400" data-status="active">Активные</button>
+                    <button onclick="setStatusFilter('completed')" class="status-tab flex-1 sm:flex-initial px-3 py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400" data-status="completed">Завершенные</button>
+                </div>
+            </div>
+
+            <!-- Заголовок текущего списка -->
+            <div class="flex items-center justify-between my-5">
+                <h2 id="currentCategoryTitle" class="text-xl font-bold text-slate-800 dark:text-slate-100">Все задачи</h2>
+                <span id="tasksCounter" class="text-xs text-slate-400 font-medium">Показано: 0</span>
+            </div>
+
+            <!-- Список задач -->
+            <div id="tasksList" class="flex-1 space-y-3 overflow-y-auto pr-1">
+                <!-- Динамически заполняется через JS -->
+            </div>
+
+            <!-- Пустое состояние (Empty State) -->
+            <div id="emptyState" class="hidden flex-1 flex flex-col items-center justify-center py-12 text-center">
+                <div class="w-20 h-20 bg-slate-100 dark:bg-slate-700/50 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-600 mb-4 text-3xl">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <h3 class="text-base font-semibold text-slate-700 dark:text-slate-300">Задач пока нет</h3>
+                <p class="text-xs text-slate-400 max-w-xs mt-1">Добавьте новую задачу или измените параметры фильтрации.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
+
+    <!-- 1. Модалка создания задачи -->
+    <div id="createTaskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 animate-modal max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-700">
+                <h3 class="text-lg font-bold">Новая задача</h3>
+                <button onclick="closeModal('createTaskModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <form id="createTaskForm" onsubmit="handleCreateTask(event)" class="mt-4 space-y-4 overflow-y-auto pr-1 flex-1">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Название задачи *</label>
+                    <input type="text" id="createTitle" required placeholder="Например: Подготовить отчет..." class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Описание</label>
+                    <textarea id="createDesc" rows="3" placeholder="Добавьте подробности..." class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500 resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Категория</label>
+                        <select id="createCategory" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="Работа">Работа</option>
+                            <option value="Личное">Личное</option>
+                            <option value="Учеба">Учеба</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Приоритет</label>
+                        <select id="createPriority" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="Низкий">Низкий</option>
+                            <option value="Средний" selected>Средний</option>
+                            <option value="Высокий">Высокий</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Срок выполнения (Due Date)</label>
+                    <input type="date" id="createDueDate" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <!-- Подзадачи -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Подзадачи</label>
+                    <div id="createSubtasksList" class="space-y-2 mb-2"></div>
+                    <div class="flex gap-2">
+                        <input type="text" id="createSubtaskInput" placeholder="Добавить пункт..." class="flex-1 px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs focus:outline-none">
+                        <button type="button" onclick="addSubtaskToForm('create')" class="px-3 py-1.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-xs font-medium rounded-lg">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-700">
+                    <button type="button" onclick="closeModal('createTaskModal')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-sm font-medium">Отмена</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium shadow-md">Создать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Модалка редактирования задачи -->
+    <div id="editTaskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 animate-modal max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-700">
+                <h3 class="text-lg font-bold">Редактирование задачи</h3>
+                <button onclick="closeModal('editTaskModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <form id="editTaskForm" onsubmit="handleEditTask(event)" class="mt-4 space-y-4 overflow-y-auto pr-1 flex-1">
+                <input type="hidden" id="editTaskId">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Название задачи *</label>
+                    <input type="text" id="editTitle" required class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Описание</label>
+                    <textarea id="editDesc" rows="3" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500 resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Категория</label>
+                        <select id="editCategory" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="Работа">Работа</option>
+                            <option value="Личное">Личное</option>
+                            <option value="Учеба">Учеба</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Приоритет</label>
+                        <select id="editPriority" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="Низкий">Низкий</option>
+                            <option value="Средний">Средний</option>
+                            <option value="Высокий">Высокий</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Срок выполнения (Due Date)</label>
+                    <input type="date" id="editDueDate" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <!-- Подзадачи -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Подзадачи</label>
+                    <div id="editSubtasksList" class="space-y-2 mb-2"></div>
+                    <div class="flex gap-2">
+                        <input type="text" id="editSubtaskInput" placeholder="Добавить пункт..." class="flex-1 px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs focus:outline-none">
+                        <button type="button" onclick="addSubtaskToForm('edit')" class="px-3 py-1.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-xs font-medium rounded-lg">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-700">
+                    <button type="button" onclick="closeModal('editTaskModal')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-sm font-medium">Отмена</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium shadow-md">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. Модалка просмотра деталей задачи -->
+    <div id="detailsTaskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 animate-modal max-h-[90vh] flex flex-col">
+            
+            <div class="flex justify-between items-start pb-4 border-b border-slate-100 dark:border-slate-700">
+                <div class="flex items-center gap-2 flex-wrap" id="detailsBadges">
+                    <!-- Теги загрузятся динаимчески -->
+                </div>
+                <button onclick="closeModal('detailsTaskModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="mt-4 overflow-y-auto pr-1 space-y-4 flex-1">
+                <h3 id="detailsTitle" class="text-xl font-bold break-words"></h3>
+                
+                <div class="text-xs text-slate-400 flex items-center gap-4">
+                    <span><i class="fa-regular fa-calendar mr-1"></i> <span id="detailsDueDate">--</span></span>
+                    <span><i class="fa-solid fa-layer-group mr-1"></i> <span id="detailsCategory">--</span></span>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700/50">
+                    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Описание</h4>
+                    <p id="detailsDesc" class="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-line break-words"></p>
+                </div>
+
+                <!-- Подзадачи с интерактивными чекбоксами -->
+                <div>
+                    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Чеклист подзадач</h4>
+                    <div id="detailsSubtasksList" class="space-y-2">
+                        <!-- Динамический список -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Нижняя панель действий -->
+            <div class="pt-4 flex justify-between items-center border-t border-slate-100 dark:border-slate-700 mt-4">
+                <button id="detailsDeleteBtn" class="px-3.5 py-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-xl text-sm font-medium transition-colors">
+                    <i class="fa-solid fa-trash-can mr-1.5"></i> Удалить
+                </button>
+                <div class="flex gap-2">
+                    <button id="detailsEditBtn" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-sm font-medium rounded-xl">
+                        <i class="fa-solid fa-pen mr-1.5"></i> Изменить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // Инициализация хранилища задач и состояния
+        let tasks = JSON.parse(localStorage.getItem('todo_tasks')) || [
+            {
+                id: '1',
+                title: 'Разработать интерфейс приложения',
+                description: 'Создать стильный UI на HTML, CSS и JS с поддержкой темной темы и модальных окон.',
+                category: 'Работа',
+                priority: 'Высокий',
+                dueDate: '2026-11-01',
+                completed: false,
+                subtasks: [
+                    { id: 's1', text: 'Сверстать главный экран', completed: true },
+                    { id: 's2', text: 'Настроить модальные окна', completed: true },
+                    { id: 's3', text: 'Проверить мобильную адаптивность', completed: false }
+                ]
+            },
+            {
+                id: '2',
+                title: 'Купить продукты на неделю',
+                description: 'Фрукты, овощи, заехать на рынок.',
+                category: 'Личное',
+                priority: 'Низкий',
+                dueDate: '2026-10-30',
+                completed: false,
+                subtasks: []
+            }
+        ];
+
+        let currentCategory = 'all';
+        let currentStatus = 'all';
+        let tempSubtasks = []; // Временные подзадачи для модалок
+
+        // --- Переключение темы ---
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // --- Сохранение в LocalStorage ---
+        function saveTasks() {
+            localStorage.setItem('todo_tasks', JSON.stringify(tasks));
+            updateCounters();
+            renderTasks();
+        }
+
+        // --- Фильтрация ---
+        function setCategoryFilter(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if(btn.dataset.category === cat) {
+                    btn.classList.add('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-900/30', 'dark:text-indigo-400');
+                    btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+                } else {
+                    btn.classList.remove('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-900/30', 'dark:text-indigo-400');
+                    btn.classList.add('text-slate-600', 'dark:text-slate-400');
+                }
+            });
+
+            const titles = { 'all': 'Все задачи', 'Работа': 'Работа', 'Личное': 'Личное', 'Учеба': 'Учеба' };
+            document.getElementById('currentCategoryTitle').innerText = titles[cat];
+            renderTasks();
+        }
+
+        function setStatusFilter(status) {
+            currentStatus = status;
+            document.querySelectorAll('.status-tab').forEach(btn => {
+                if(btn.dataset.status === status) {
+                    btn.classList.add('bg-white', 'dark:bg-slate-800', 'shadow-sm', 'text-indigo-600', 'dark:text-indigo-400');
+                } else {
+                    btn.classList.remove('bg-white', 'dark:bg-slate-800', 'shadow-sm', 'text-indigo-600', 'dark:text-indigo-400');
+                }
+            });
+            renderTasks();
+        }
+
+        // --- Отрисовка списка задач ---
+        function renderTasks() {
+            const listEl = document.getElementById('tasksList');
+            const emptyEl = document.getElementById('emptyState');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            listEl.innerHTML = '';
+
+            const filtered = tasks.filter(t => {
+                const matchCategory = currentCategory === 'all' || t.category === currentCategory;
+                const matchStatus = currentStatus === 'all' || 
+                                    (currentStatus === 'completed' && t.completed) || 
+                                    (currentStatus === 'active' && !t.completed);
+                const matchSearch = t.title.toLowerCase().includes(searchVal) || t.description.toLowerCase().includes(searchVal);
+                return matchCategory && matchStatus && matchSearch;
+            });
+
+            document.getElementById('tasksCounter').innerText = `Показано: ${filtered.length}`;
+
+            if (filtered.length === 0) {
+                emptyEl.classList.remove('hidden');
+            } else {
+                emptyEl.classList.add('hidden');
+                filtered.forEach(task => {
+                    listEl.appendChild(createTaskCard(task));
+                });
+            }
+        }
+
+        // Рендер карточки
+        function createTaskCard(task) {
+            const card = document.createElement('div');
+            card.className = `group flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100/80 dark:hover:bg-slate-900 border border-slate-200/60 dark:border-slate-700/60 rounded-xl transition-all ${task.completed ? 'opacity-65' : ''}`;
+            
+            // Цвета приоритетов
+            const priorityColors = {
+                'Высокий': 'bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400',
+                'Средний': 'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400',
+                'Низкий': 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400'
+            };
+
+            const subtasksCount = task.subtasks ? task.subtasks.length : 0;
+            const subtasksDone = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
+
+            card.innerHTML = `
+                <div class="flex items-center gap-3.5 flex-1 min-w-0 pr-3">
+                    <button onclick="toggleTaskStatus('${task.id}')" class="flex-shrink-0 w-5 h-5 rounded-md border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center transition-colors ${task.completed ? 'bg-indigo-600 border-indigo-600 text-white' : 'hover:border-indigo-500'}">
+                        ${task.completed ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                    </button>
+                    
+                    <div class="min-w-0 flex-1 cursor-pointer" onclick="openDetailsModal('${task.id}')">
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <h4 class="text-sm font-semibold truncate ${task.completed ? 'line-through text-slate-400 dark:text-slate-500' : ''}">${escapeHtml(task.title)}</h4>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs text-slate-400">
+                            <span class="px-2 py-0.5 rounded-md ${priorityColors[task.priority]} font-medium">${task.priority}</span>
+                            ${task.dueDate ? `<span><i class="fa-regular fa-calendar mr-1"></i>${task.dueDate}</span>` : ''}
+                            ${subtasksCount > 0 ? `<span><i class="fa-solid fa-list-check mr-1"></i>${subtasksDone}/${subtasksCount}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onclick="openEditModal('${task.id}')" class="p-2 text-slate-400 hover:text-indigo-600 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button onclick="deleteTask('${task.id}')" class="p-2 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Переключение статуса
+        function toggleTaskStatus(id) {
+            const task = tasks.find(t => t.id === id);
+            if(task) {
+                task.completed = !task.completed;
+                saveTasks();
+            }
+        }
+
+        // Удаление задачи
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            closeModal('detailsTaskModal');
+        }
+
+        // Обновление счетчиков и прогресс-бара
+        function updateCounters() {
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.completed).length;
+            
+            document.getElementById('count-all').innerText = total;
+            document.getElementById('count-work').innerText = tasks.filter(t => t.category === 'Работа').length;
+            document.getElementById('count-personal').innerText = tasks.filter(t => t.category === 'Личное').length;
+            document.getElementById('count-study').innerText = tasks.filter(t => t.category === 'Учеба').length;
+
+            const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+            document.getElementById('progressText').innerText = `${percentage}%`;
+        }
+
+        // --- Управление подзадачами в модалках ---
+        function renderFormSubtasks(mode) {
+            const listEl = document.getElementById(`${mode}SubtasksList`);
+            listEl.innerHTML = '';
+            tempSubtasks.forEach((sub, idx) => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between bg-slate-50 dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs';
+                item.innerHTML = `
+                    <span class="truncate">${escapeHtml(sub.text)}</span>
+                    <button type="button" onclick="removeSubtaskFromForm(${idx}, '${mode}')" class="text-slate-400 hover:text-rose-500">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        function addSubtaskToForm(mode) {
+            const input = document.getElementById(`${mode}SubtaskInput`);
+            if(input.value.trim() !== '') {
+                tempSubtasks.push({ id: Date.now().toString(), text: input.value.trim(), completed: false });
+                input.value = '';
+                renderFormSubtasks(mode);
+            }
+        }
+
+        function removeSubtaskFromForm(index, mode) {
+            tempSubtasks.splice(index, 1);
+            renderFormSubtasks(mode);
+        }
+
+        // --- МОДАЛЬНЫЕ ОКНА LOGIC ---
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Открытие модалки создания
+        function openCreateModal() {
+            tempSubtasks = [];
+            document.getElementById('createTaskForm').reset();
+            renderFormSubtasks('create');
+            openModal('createTaskModal');
+        }
+
+        function handleCreateTask(e) {
+            e.preventDefault();
+            const newTask = {
+                id: Date.now().toString(),
+                title: document.getElementById('createTitle').value,
+                description: document.getElementById('createDesc').value,
+                category: document.getElementById('createCategory').value,
+                priority: document.getElementById('createPriority').value,
+                dueDate: document.getElementById('createDueDate').value,
+                completed: false,
+                subtasks: [...tempSubtasks]
+            };
+            tasks.unshift(newTask);
+            saveTasks();
+            closeModal('createTaskModal');
+        }
+
+        // Открытие модалки редактирования
+        function openEditModal(id) {
+            const task = tasks.find(t => t.id === id);
+            if(!task) return;
+
+            document.getElementById('editTaskId').value = task.id;
+            document.getElementById('editTitle').value = task.title;
+            document.getElementById('editDesc').value = task.description;
+            document.getElementById('editCategory').value = task.category;
+            document.getElementById('editPriority').value = task.priority;
+            document.getElementById('editDueDate').value = task.dueDate;
+
+            tempSubtasks = task.subtasks ? [...task.subtasks] : [];
+            renderFormSubtasks('edit');
+            
+            closeModal('detailsTaskModal');
+            openModal('editTaskModal');
+        }
+
+        function handleEditTask(e) {
+            e.preventDefault();
+            const id = document.getElementById('editTaskId').value;
+            const task = tasks.find(t => t.id === id);
+            if(task) {
+                task.title = document.getElementById('editTitle').value;
+                task.description = document.getElementById('editDesc').value;
+                task.category = document.getElementById('editCategory').value;
+                task.priority = document.getElementById('editPriority').value;
+                task.dueDate = document.getElementById('editDueDate').value;
+                task.subtasks = [...tempSubtasks];
+                saveTasks();
+            }
+            closeModal('editTaskModal');
+        }
+
+        // Открытие деталей задачи
+        function openDetailsModal(id) {
+            const task = tasks.find(t => t.id === id);
+            if(!task) return;
+
+            document.getElementById('detailsTitle').innerText = task.title;
+            document.getElementById('detailsDesc').innerText = task.description || 'Описание отсутствует.';
+            document.getElementById('detailsCategory').innerText = task.category;
+            document.getElementById('detailsDueDate').innerText = task.dueDate || 'Не указан';
+
+            // Баджи
+            const badgesContainer = document.getElementById('detailsBadges');
+            badgesContainer.innerHTML = `
+                <span class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-xs font-semibold">${task.category}</span>
+                <span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${
+                    task.priority === 'Высокий' ? 'bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400' :
+                    task.priority === 'Средний' ? 'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400' :
+                    'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400'
+                }">${task.priority} приоритет</span>
+            `;
+
+            // Чеклист подзадач
+            const subtasksList = document.getElementById('detailsSubtasksList');
+            subtasksList.innerHTML = '';
+            if(task.subtasks && task.subtasks.length > 0) {
+                task.subtasks.forEach((sub) => {
+                    const subItem = document.createElement('label');
+                    subItem.className = 'flex items-center gap-3 p-2.5 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-700/50 cursor-pointer text-sm';
+                    subItem.innerHTML = `
+                        <input type="checkbox" ${sub.completed ? 'checked' : ''} onchange="toggleSubtaskStatus('${task.id}', '${sub.id}')" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                        <span class="${sub.completed ? 'line-through text-slate-400' : ''}">${escapeHtml(sub.text)}</span>
+                    `;
+                    subtasksList.appendChild(subItem);
+                });
+            } else {
+                subtasksList.innerHTML = '<p class="text-xs text-slate-400 italic">Подзадач нет</p>';
+            }
+
+            // Настройка кнопок
+            document.getElementById('detailsEditBtn').onclick = () => openEditModal(task.id);
+            document.getElementById('detailsDeleteBtn').onclick = () => deleteTask(task.id);
+
+            openModal('detailsTaskModal');
+        }
+
+        // Переключение подзадачи из карточки деталей
+        function toggleSubtaskStatus(taskId, subtaskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if(task && task.subtasks) {
+                const sub = task.subtasks.find(s => s.id === subtaskId);
+                if(sub) {
+                    sub.completed = !sub.completed;
+                    saveTasks();
+                    openDetailsModal(taskId); // Обновить модалку
+                }
+            }
+        }
+
+        // Утилита безопасного вывода текста
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        // Первоначальная инициализация
+        window.onload = function() {
+            updateCounters();
+            renderTasks();
+        };
+    </script>
+</body>
+</html>
