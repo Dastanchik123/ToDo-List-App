@@ -41,9 +41,26 @@
             label1 = new Label();
             pictureBox1 = new PictureBox();
             panel2 = new Panel();
+            flowTasks = new FlowLayoutPanel();
+            label6 = new Label();
+            label5 = new Label();
+            label4 = new Label();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            panel3 = new Panel();
+            textBox1 = new TextBox();
+            panel4 = new Panel();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            button8 = new Button();
+            button7 = new Button();
+            button6 = new Button();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            panel2.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            panel3.SuspendLayout();
+            panel4.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -98,6 +115,7 @@
             button5.TextAlign = ContentAlignment.MiddleLeft;
             button5.TextImageRelation = TextImageRelation.ImageBeforeText;
             button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
             // 
             // button4
             // 
@@ -113,6 +131,7 @@
             button4.TextAlign = ContentAlignment.MiddleLeft;
             button4.TextImageRelation = TextImageRelation.ImageBeforeText;
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // button3
             // 
@@ -144,6 +163,7 @@
             button2.TextAlign = ContentAlignment.MiddleLeft;
             button2.TextImageRelation = TextImageRelation.ImageBeforeText;
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // label3
             // 
@@ -190,7 +210,6 @@
             label1.Size = new Size(76, 27);
             label1.TabIndex = 1;
             label1.Text = "TaskFlow";
-            label1.Click += label1_Click;
             // 
             // pictureBox1
             // 
@@ -205,12 +224,147 @@
             // panel2
             // 
             panel2.BackColor = SystemColors.ControlLightLight;
+            panel2.Controls.Add(flowTasks);
+            panel2.Controls.Add(label6);
+            panel2.Controls.Add(label5);
+            panel2.Controls.Add(label4);
+            panel2.Controls.Add(tableLayoutPanel2);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(428, 8);
             panel2.Margin = new Padding(8);
             panel2.Name = "panel2";
             panel2.Size = new Size(683, 606);
             panel2.TabIndex = 1;
+            // 
+            // flowTasks
+            // 
+            flowTasks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            flowTasks.Location = new Point(18, 136);
+            flowTasks.Name = "flowTasks";
+            flowTasks.Size = new Size(647, 454);
+            flowTasks.TabIndex = 4;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(570, 113);
+            label6.Name = "label6";
+            label6.Size = new Size(66, 15);
+            label6.TabIndex = 3;
+            label6.Text = "Показано: ";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            label5.Location = new Point(26, 100);
+            label5.Name = "label5";
+            label5.Size = new Size(58, 28);
+            label5.TabIndex = 2;
+            label5.Text = "Тест ";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = SystemColors.ButtonShadow;
+            label4.Location = new Point(18, 70);
+            label4.Name = "label4";
+            label4.Size = new Size(647, 15);
+            label4.TabIndex = 1;
+            label4.Text = "________________________________________________________________________________________________________________________________";
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 3;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 72.817955F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.182045F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 275F));
+            tableLayoutPanel2.Controls.Add(panel3, 0, 0);
+            tableLayoutPanel2.Controls.Add(panel4, 2, 0);
+            tableLayoutPanel2.Location = new Point(3, 26);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(677, 34);
+            tableLayoutPanel2.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            panel3.BackColor = SystemColors.ControlLight;
+            panel3.Controls.Add(textBox1);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(3, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(286, 28);
+            panel3.TabIndex = 0;
+            // 
+            // textBox1
+            // 
+            textBox1.BackColor = SystemColors.ControlLight;
+            textBox1.BorderStyle = BorderStyle.None;
+            textBox1.Location = new Point(3, 6);
+            textBox1.MaxLength = 30;
+            textBox1.Name = "textBox1";
+            textBox1.PlaceholderText = "       Поиск по задачам......";
+            textBox1.Size = new Size(283, 16);
+            textBox1.TabIndex = 0;
+            // 
+            // panel4
+            // 
+            panel4.BackColor = SystemColors.ControlLight;
+            panel4.Controls.Add(tableLayoutPanel3);
+            panel4.Dock = DockStyle.Fill;
+            panel4.Location = new Point(404, 3);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(270, 28);
+            panel4.TabIndex = 1;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 3;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.7777786F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.4814816F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40.74074F));
+            tableLayoutPanel3.Controls.Add(button8, 2, 0);
+            tableLayoutPanel3.Controls.Add(button7, 1, 0);
+            tableLayoutPanel3.Controls.Add(button6, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(0, 0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Size = new Size(270, 28);
+            tableLayoutPanel3.TabIndex = 2;
+            // 
+            // button8
+            // 
+            button8.Dock = DockStyle.Fill;
+            button8.Location = new Point(163, 3);
+            button8.Name = "button8";
+            button8.Size = new Size(104, 22);
+            button8.TabIndex = 2;
+            button8.Text = "Завершенные";
+            button8.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            button7.Dock = DockStyle.Fill;
+            button7.Location = new Point(78, 3);
+            button7.Name = "button7";
+            button7.Size = new Size(79, 22);
+            button7.TabIndex = 1;
+            button7.Text = "Активные";
+            button7.UseVisualStyleBackColor = true;
+            // 
+            // button6
+            // 
+            button6.Dock = DockStyle.Fill;
+            button6.Location = new Point(3, 3);
+            button6.Name = "button6";
+            button6.Size = new Size(69, 22);
+            button6.TabIndex = 0;
+            button6.Text = "Все ";
+            button6.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -221,12 +375,20 @@
             Controls.Add(tableLayoutPanel1);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form1";
+            Text = "  ";
             WindowState = FormWindowState.Maximized;
+            Load += Form1_Load;
             tableLayoutPanel1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            panel4.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -244,5 +406,17 @@
         private Button button4;
         private Button button3;
         private Button button2;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Panel panel3;
+        private TextBox textBox1;
+        private Panel panel4;
+        private TableLayoutPanel tableLayoutPanel3;
+        private Button button8;
+        private Button button7;
+        private Button button6;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private FlowLayoutPanel flowTasks;
     }
 }
