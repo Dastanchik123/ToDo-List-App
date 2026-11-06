@@ -75,10 +75,11 @@
             tableLayoutPanel1.Controls.Add(panel2, 3, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1319, 622);
+            tableLayoutPanel1.Size = new Size(1507, 788);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // panel1
@@ -94,11 +95,12 @@
             panel1.Controls.Add(label1);
             panel1.Controls.Add(pictureBox1);
             panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(205, 8);
-            panel1.Margin = new Padding(8);
+            panel1.Location = new Point(235, 10);
+            panel1.Margin = new Padding(9, 10, 9, 10);
             panel1.Name = "panel1";
-            panel1.Size = new Size(181, 606);
+            panel1.Size = new Size(208, 768);
             panel1.TabIndex = 0;
+            panel1.Paint += panel1_Paint;
             // 
             // button5
             // 
@@ -107,9 +109,10 @@
             button5.Cursor = Cursors.Hand;
             button5.Image = (Image)resources.GetObject("button5.Image");
             button5.ImageAlign = ContentAlignment.MiddleLeft;
-            button5.Location = new Point(13, 307);
+            button5.Location = new Point(15, 389);
+            button5.Margin = new Padding(3, 4, 3, 4);
             button5.Name = "button5";
-            button5.Size = new Size(159, 44);
+            button5.Size = new Size(183, 56);
             button5.TabIndex = 8;
             button5.Text = "Учеба";
             button5.TextAlign = ContentAlignment.MiddleLeft;
@@ -123,9 +126,10 @@
             button4.BackgroundImageLayout = ImageLayout.Zoom;
             button4.Image = (Image)resources.GetObject("button4.Image");
             button4.ImageAlign = ContentAlignment.MiddleLeft;
-            button4.Location = new Point(13, 257);
+            button4.Location = new Point(15, 326);
+            button4.Margin = new Padding(3, 4, 3, 4);
             button4.Name = "button4";
-            button4.Size = new Size(159, 44);
+            button4.Size = new Size(183, 56);
             button4.TabIndex = 7;
             button4.Text = "Личное";
             button4.TextAlign = ContentAlignment.MiddleLeft;
@@ -139,9 +143,10 @@
             button3.BackgroundImageLayout = ImageLayout.Zoom;
             button3.Image = (Image)resources.GetObject("button3.Image");
             button3.ImageAlign = ContentAlignment.MiddleLeft;
-            button3.Location = new Point(13, 207);
+            button3.Location = new Point(15, 262);
+            button3.Margin = new Padding(3, 4, 3, 4);
             button3.Name = "button3";
-            button3.Size = new Size(159, 44);
+            button3.Size = new Size(183, 56);
             button3.TabIndex = 6;
             button3.Text = "Работа";
             button3.TextAlign = ContentAlignment.MiddleLeft;
@@ -155,9 +160,10 @@
             button2.BackgroundImageLayout = ImageLayout.Zoom;
             button2.Image = (Image)resources.GetObject("button2.Image");
             button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(13, 157);
+            button2.Location = new Point(15, 199);
+            button2.Margin = new Padding(3, 4, 3, 4);
             button2.Name = "button2";
-            button2.Size = new Size(159, 44);
+            button2.Size = new Size(183, 56);
             button2.TabIndex = 5;
             button2.Text = "Все задачи";
             button2.TextAlign = ContentAlignment.MiddleLeft;
@@ -170,7 +176,7 @@
             label3.AutoSize = true;
             label3.Font = new Font("Arial Black", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label3.ForeColor = SystemColors.ControlLight;
-            label3.Location = new Point(13, 136);
+            label3.Location = new Point(15, 172);
             label3.Name = "label3";
             label3.Size = new Size(96, 18);
             label3.TabIndex = 4;
@@ -182,20 +188,21 @@
             button1.BackColor = Color.FromArgb(79, 70, 229);
             button1.Font = new Font("Segoe UI Black", 10F, FontStyle.Regular, GraphicsUnit.Point, 204);
             button1.ForeColor = Color.White;
-            button1.Location = new Point(13, 78);
-            button1.Margin = new Padding(3, 8, 3, 8);
+            button1.Location = new Point(15, 99);
+            button1.Margin = new Padding(3, 10, 3, 10);
             button1.Name = "button1";
-            button1.Size = new Size(159, 39);
+            button1.Size = new Size(183, 49);
             button1.TabIndex = 3;
             button1.Text = "+  Новая задача";
             button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
             label2.ForeColor = SystemColors.AppWorkspace;
-            label2.Location = new Point(65, 45);
+            label2.Location = new Point(74, 57);
             label2.Name = "label2";
             label2.Size = new Size(65, 15);
             label2.TabIndex = 2;
@@ -205,7 +212,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Dubai", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(60, 22);
+            label1.Location = new Point(69, 28);
             label1.Name = "label1";
             label1.Size = new Size(76, 27);
             label1.TabIndex = 1;
@@ -214,9 +221,10 @@
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.Снимок_экрана_2026_10_29_160138;
-            pictureBox1.Location = new Point(13, 22);
+            pictureBox1.Location = new Point(15, 28);
+            pictureBox1.Margin = new Padding(3, 4, 3, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(41, 38);
+            pictureBox1.Size = new Size(47, 48);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -230,26 +238,27 @@
             panel2.Controls.Add(label4);
             panel2.Controls.Add(tableLayoutPanel2);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(428, 8);
-            panel2.Margin = new Padding(8);
+            panel2.Location = new Point(491, 10);
+            panel2.Margin = new Padding(9, 10, 9, 10);
             panel2.Name = "panel2";
-            panel2.Size = new Size(683, 606);
+            panel2.Size = new Size(780, 768);
             panel2.TabIndex = 1;
             // 
             // flowTasks
             // 
             flowTasks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            flowTasks.Location = new Point(18, 136);
+            flowTasks.Location = new Point(21, 172);
+            flowTasks.Margin = new Padding(3, 4, 3, 4);
             flowTasks.Name = "flowTasks";
-            flowTasks.Size = new Size(647, 454);
+            flowTasks.Size = new Size(738, 575);
             flowTasks.TabIndex = 4;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(570, 113);
+            label6.Location = new Point(651, 143);
             label6.Name = "label6";
-            label6.Size = new Size(66, 15);
+            label6.Size = new Size(77, 19);
             label6.TabIndex = 3;
             label6.Text = "Показано: ";
             // 
@@ -257,7 +266,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label5.Location = new Point(26, 100);
+            label5.Location = new Point(30, 127);
             label5.Name = "label5";
             label5.Size = new Size(58, 28);
             label5.TabIndex = 2;
@@ -267,9 +276,9 @@
             // 
             label4.AutoSize = true;
             label4.ForeColor = SystemColors.ButtonShadow;
-            label4.Location = new Point(18, 70);
+            label4.Location = new Point(21, 89);
             label4.Name = "label4";
-            label4.Size = new Size(647, 15);
+            label4.Size = new Size(777, 19);
             label4.TabIndex = 1;
             label4.Text = "________________________________________________________________________________________________________________________________";
             // 
@@ -278,14 +287,15 @@
             tableLayoutPanel2.ColumnCount = 3;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 72.817955F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.182045F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 275F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 314F));
             tableLayoutPanel2.Controls.Add(panel3, 0, 0);
             tableLayoutPanel2.Controls.Add(panel4, 2, 0);
-            tableLayoutPanel2.Location = new Point(3, 26);
+            tableLayoutPanel2.Location = new Point(3, 33);
+            tableLayoutPanel2.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(677, 34);
+            tableLayoutPanel2.Size = new Size(774, 43);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // panel3
@@ -293,20 +303,22 @@
             panel3.BackColor = SystemColors.ControlLight;
             panel3.Controls.Add(textBox1);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(3, 3);
+            panel3.Location = new Point(3, 4);
+            panel3.Margin = new Padding(3, 4, 3, 4);
             panel3.Name = "panel3";
-            panel3.Size = new Size(286, 28);
+            panel3.Size = new Size(328, 35);
             panel3.TabIndex = 0;
             // 
             // textBox1
             // 
             textBox1.BackColor = SystemColors.ControlLight;
             textBox1.BorderStyle = BorderStyle.None;
-            textBox1.Location = new Point(3, 6);
+            textBox1.Location = new Point(3, 8);
+            textBox1.Margin = new Padding(3, 4, 3, 4);
             textBox1.MaxLength = 30;
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "       Поиск по задачам......";
-            textBox1.Size = new Size(283, 16);
+            textBox1.Size = new Size(323, 19);
             textBox1.TabIndex = 0;
             // 
             // panel4
@@ -314,9 +326,10 @@
             panel4.BackColor = SystemColors.ControlLight;
             panel4.Controls.Add(tableLayoutPanel3);
             panel4.Dock = DockStyle.Fill;
-            panel4.Location = new Point(404, 3);
+            panel4.Location = new Point(462, 4);
+            panel4.Margin = new Padding(3, 4, 3, 4);
             panel4.Name = "panel4";
-            panel4.Size = new Size(270, 28);
+            panel4.Size = new Size(309, 35);
             panel4.TabIndex = 1;
             // 
             // tableLayoutPanel3
@@ -330,49 +343,57 @@
             tableLayoutPanel3.Controls.Add(button6, 0, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(0, 0);
+            tableLayoutPanel3.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(270, 28);
+            tableLayoutPanel3.Size = new Size(309, 35);
             tableLayoutPanel3.TabIndex = 2;
             // 
             // button8
             // 
             button8.Dock = DockStyle.Fill;
-            button8.Location = new Point(163, 3);
+            button8.Location = new Point(185, 4);
+            button8.Margin = new Padding(3, 4, 3, 4);
             button8.Name = "button8";
-            button8.Size = new Size(104, 22);
+            button8.Size = new Size(121, 27);
             button8.TabIndex = 2;
             button8.Text = "Завершенные";
             button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
             // 
             // button7
             // 
             button7.Dock = DockStyle.Fill;
-            button7.Location = new Point(78, 3);
+            button7.Location = new Point(88, 4);
+            button7.Margin = new Padding(3, 4, 3, 4);
             button7.Name = "button7";
-            button7.Size = new Size(79, 22);
+            button7.Size = new Size(91, 27);
             button7.TabIndex = 1;
             button7.Text = "Активные";
             button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
             // 
             // button6
             // 
             button6.Dock = DockStyle.Fill;
-            button6.Location = new Point(3, 3);
+            button6.Location = new Point(3, 4);
+            button6.Margin = new Padding(3, 4, 3, 4);
             button6.Name = "button6";
-            button6.Size = new Size(69, 22);
+            button6.Size = new Size(79, 27);
             button6.TabIndex = 0;
             button6.Text = "Все ";
             button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLight;
-            ClientSize = new Size(1319, 622);
+            ClientSize = new Size(1507, 788);
             Controls.Add(tableLayoutPanel1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "  ";
