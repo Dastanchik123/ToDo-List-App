@@ -2,21 +2,33 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using ToDoList;
 
 public class TaskCard : Panel
 {
+    private Form1 mainForm;
     public TaskCard(string title, string priority,
-                    string date, string progress = "")
+                    string date, string status, Form1 form)
     {
         Size = new Size(880, 76);
         BackColor = Color.FromArgb(248, 250, 252);
         BorderStyle = BorderStyle.None;
         Margin = new Padding(0, 0, 0, 12);
+        mainForm = form;
 
 
         CheckBox checkBox = new CheckBox();
+        if (status == "Завершенный")
+        {
+            checkBox.Checked = true;
+        }
+        else if(status == "Активный")
+        {
+            checkBox.Checked = false;
+        }
         checkBox.Location = new Point(16, 26);
         checkBox.Size = new Size(20, 20);
+        checkBox.Click += (sender, e) => mainForm.chaingeStatus(this, status);
         Controls.Add(checkBox);
 
         Label titleLabel = new Label();
@@ -50,15 +62,6 @@ public class TaskCard : Panel
         dateLabel.ForeColor = Color.Gray;
         Controls.Add(dateLabel);
 
-        if (!string.IsNullOrEmpty(progress))
-        {
-            Label progressLabel = new Label();
-            progressLabel.Text = "☷ " + progress;
-            progressLabel.Location = new Point(225, 42);
-            progressLabel.AutoSize = true;
-            progressLabel.Font = new Font("Segoe UI", 9);
-            progressLabel.ForeColor = Color.Gray;
-            Controls.Add(progressLabel);
-        }
+        
     }
 }

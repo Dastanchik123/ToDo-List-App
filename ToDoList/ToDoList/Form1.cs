@@ -18,16 +18,16 @@ namespace ToDoList
 
         public List<TaskItem> Tasks = new List<TaskItem>()
         {
-            new TaskItem("Разработать интерфейс", "Высокий", "2026-11-01", "2/3", "Работа", "Активный"),
-            new TaskItem("Купить продукты", "Низкий", "2026-11-02", "0/3", "Личное", "Активный"),
-            new TaskItem("Сделать домашнюю работу", "Средний", "2026-11-03", "1/3", "Учёба", "Активный"),
-            new TaskItem("Изучить C#", "Высокий", "2026-11-04", "3/5", "Учёба", "Активный"),
-            new TaskItem("Создать базу данных", "Высокий", "2026-11-05", "1/4", "Работа", "Активный"),
-            new TaskItem("Проверить код", "Средний", "2026-11-06", "2/2", "Работа", "Завершенный"),
-            new TaskItem("Исправить ошибки", "Высокий", "2026-11-07", "0/3", "Работа", "Активный"),
-            new TaskItem("Сделать дизайн", "Средний", "2026-11-08", "1/3", "Работа", "Активный"),
-            new TaskItem("Протестировать приложение", "Низкий", "2026-11-09", "0/2", "Работа", "Активный"),
-            new TaskItem("Завершить проект", "Высокий", "2026-11-10", "0/5", "Работа", "Активный")
+            new TaskItem("Разработать интерфейс", "Высокий", "2026-11-01", "Работа", "Активный"),
+            new TaskItem("Купить продукты", "Низкий", "2026-11-02", "Личное", "Активный"),
+            new TaskItem("Сделать домашнюю работу", "Средний", "2026-11-03", "Учёба", "Активный"),
+            new TaskItem("Изучить C#", "Высокий", "2026-11-04", "Учёба", "Активный"),
+            new TaskItem("Создать базу данных", "Высокий", "2026-11-05", "Работа", "Активный"),
+            new TaskItem("Проверить код", "Средний", "2026-11-06", "Работа", "Завершенный"),
+            new TaskItem("Исправить ошибки", "Высокий", "2026-11-07", "Работа", "Активный"),
+            new TaskItem("Сделать дизайн", "Средний", "2026-11-08", "Работа", "Активный"),
+            new TaskItem("Протестировать приложение", "Низкий", "2026-11-09", "Работа", "Активный"),
+            new TaskItem("Завершить проект", "Высокий", "2026-11-10", "Работа", "Активный")
         };
 
         private void Form1_Load(object sender, EventArgs e)
@@ -51,7 +51,7 @@ namespace ToDoList
 
                 if (matchCategory && matchStatus)
                 {
-                    flowTasks.Controls.Add(new TaskCard(task.Title, task.Priority, task.Date, task.Progress));
+                    flowTasks.Controls.Add(new TaskCard(task.Title, task.Priority, task.Date, task.Status, this));
                     count++;
                 }
             }
@@ -60,9 +60,9 @@ namespace ToDoList
             label6.Text = $"Показано: {count}";
         }
 
-        public void AddNewTask(string title, string priority, string date, string progress, string category, string status)
+        public void AddNewTask(string title, string priority, string date, string category, string status)
         {
-            Tasks.Add(new TaskItem(title, priority, date, progress, category, status));
+            Tasks.Add(new TaskItem(title, priority, date, category, status));
             FilterTasks();
         }
 
@@ -114,8 +114,20 @@ namespace ToDoList
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form addModal = new AddModalScreen();
+            Form addModal = new AddModalScreen(this);
             addModal.ShowDialog();
+        }
+        public void chaingeStatus(TaskCard taskCard, string newStatus)
+        {
+            foreach (var task in Tasks)
+            {
+                if (task.Title == taskCard.Controls[1].Text) 
+                {
+                    task.Status = task.Status == "Активный" ? "Завершенный" : "Активный";
+                    break;
+                }
+            }
+            FilterTasks();
         }
     }
 
@@ -130,12 +142,11 @@ namespace ToDoList
         public string Category { get; set; }
         public string Status { get; set; }
 
-        public TaskItem(string title, string priority, string date, string progress, string category, string status)
+        public TaskItem(string title, string priority, string date, string category, string status)
         {
             Title = title;
             Priority = priority;
             Date = date;
-            Progress = progress;
             Category = category;
             Status = status;
         }

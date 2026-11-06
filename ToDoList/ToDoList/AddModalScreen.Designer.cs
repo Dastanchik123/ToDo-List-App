@@ -49,7 +49,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Times New Roman", 13F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label1.Location = new Point(25, 24);
+            label1.Location = new Point(22, 19);
             label1.Name = "label1";
             label1.Size = new Size(119, 20);
             label1.TabIndex = 0;
@@ -59,9 +59,9 @@
             // 
             label4.AutoSize = true;
             label4.ForeColor = SystemColors.ButtonShadow;
-            label4.Location = new Point(25, 44);
+            label4.Location = new Point(22, 35);
             label4.Name = "label4";
-            label4.Size = new Size(369, 19);
+            label4.Size = new Size(307, 15);
             label4.TabIndex = 2;
             label4.Text = "____________________________________________________________";
             // 
@@ -69,7 +69,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Times New Roman", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label2.Location = new Point(25, 84);
+            label2.Location = new Point(22, 66);
             label2.Name = "label2";
             label2.Size = new Size(89, 15);
             label2.TabIndex = 3;
@@ -78,19 +78,21 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(29, 105);
+            textBox1.Location = new Point(25, 83);
+            textBox1.Margin = new Padding(3, 2, 3, 2);
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "Например: Подготовить отчёт ....";
-            textBox1.Size = new Size(335, 26);
+            textBox1.Size = new Size(294, 23);
             textBox1.TabIndex = 4;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(25, 168);
+            textBox2.Location = new Point(22, 133);
+            textBox2.Margin = new Padding(3, 2, 3, 2);
             textBox2.Multiline = true;
             textBox2.Name = "textBox2";
             textBox2.PlaceholderText = "Добавте подробности ...";
-            textBox2.Size = new Size(335, 83);
+            textBox2.Size = new Size(294, 66);
             textBox2.TabIndex = 6;
             textBox2.TextChanged += textBox2_TextChanged;
             // 
@@ -98,7 +100,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Times New Roman", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label3.Location = new Point(21, 147);
+            label3.Location = new Point(18, 116);
             label3.Name = "label3";
             label3.Size = new Size(62, 15);
             label3.TabIndex = 5;
@@ -108,59 +110,63 @@
             // 
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Работа ", "Личное", "Учёба" });
-            comboBox1.Location = new Point(23, 285);
+            comboBox1.Location = new Point(20, 225);
+            comboBox1.Margin = new Padding(3, 2, 3, 2);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(139, 27);
+            comboBox1.Size = new Size(122, 23);
             comboBox1.TabIndex = 7;
             // 
             // comboBox2
             // 
             comboBox2.FormattingEnabled = true;
-            comboBox2.Items.AddRange(new object[] { "Работа ", "Личное", "Учёба" });
-            comboBox2.Location = new Point(215, 285);
+            comboBox2.Items.AddRange(new object[] { "Низкий", "Средний ", "Высокий" });
+            comboBox2.Location = new Point(188, 225);
+            comboBox2.Margin = new Padding(3, 2, 3, 2);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(141, 27);
+            comboBox2.Size = new Size(124, 23);
             comboBox2.TabIndex = 8;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(25, 263);
+            label5.Location = new Point(22, 208);
             label5.Name = "label5";
-            label5.Size = new Size(73, 19);
+            label5.Size = new Size(63, 15);
             label5.TabIndex = 9;
             label5.Text = "Категория";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(215, 263);
+            label6.Location = new Point(188, 208);
             label6.Name = "label6";
-            label6.Size = new Size(78, 19);
+            label6.Size = new Size(67, 15);
             label6.TabIndex = 10;
             label6.Text = "Приоритет";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(25, 322);
+            label7.Location = new Point(22, 254);
             label7.Name = "label7";
-            label7.Size = new Size(123, 19);
+            label7.Size = new Size(107, 15);
             label7.TabIndex = 11;
             label7.Text = "Срок выполнения";
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(25, 344);
+            dateTimePicker1.Location = new Point(22, 272);
+            dateTimePicker1.Margin = new Padding(3, 2, 3, 2);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(331, 26);
+            dateTimePicker1.Size = new Size(290, 23);
             dateTimePicker1.TabIndex = 12;
             // 
             // button1
             // 
-            button1.Location = new Point(161, 376);
+            button1.Location = new Point(141, 297);
+            button1.Margin = new Padding(3, 2, 3, 2);
             button1.Name = "button1";
-            button1.Size = new Size(93, 30);
+            button1.Size = new Size(81, 24);
             button1.TabIndex = 13;
             button1.Text = "Отмена ";
             button1.UseVisualStyleBackColor = true;
@@ -170,20 +176,23 @@
             // 
             button2.BackColor = Color.FromArgb(79, 70, 229);
             button2.ForeColor = Color.White;
-            button2.Location = new Point(260, 376);
+            button2.Location = new Point(228, 297);
+            button2.Margin = new Padding(3, 2, 3, 2);
             button2.Name = "button2";
-            button2.Size = new Size(96, 30);
+            button2.Size = new Size(84, 24);
             button2.TabIndex = 14;
             button2.Text = "Создать";
             button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
             // button3
             // 
             button3.FlatAppearance.BorderSize = 0;
             button3.FlatStyle = FlatStyle.Flat;
-            button3.Location = new Point(339, 21);
+            button3.Location = new Point(297, 17);
+            button3.Margin = new Padding(3, 2, 3, 2);
             button3.Name = "button3";
-            button3.Size = new Size(25, 25);
+            button3.Size = new Size(22, 20);
             button3.TabIndex = 15;
             button3.Text = "X";
             button3.UseVisualStyleBackColor = true;
@@ -191,9 +200,9 @@
             // 
             // AddModalScreen
             // 
-            AutoScaleDimensions = new SizeF(8F, 19F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(395, 435);
+            ClientSize = new Size(346, 343);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -210,6 +219,7 @@
             Controls.Add(label4);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(3, 2, 3, 2);
             Name = "AddModalScreen";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "\\";
